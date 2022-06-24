@@ -43,25 +43,12 @@ make -j$(nproc)
 sudo make install
 cd ..
 
-
 ```
 
-Copy the icestorm_template directory to a new project directory with a name of your choosing:
-
-```shell
-cp icestorm_template ~/my_tinyfpga_project
-```
-
-Build the project:
-```shell
-cd ~/my_tinyfpga_project
-make
-```
 
 The programmer script lives in this repo in [programmer/tinyfpgab.py](https://github.com/tinyfpga/TinyFPGA-B-Series/blob/master/programmer/tinyfpgab.py) Program the TinyFPGA B-series board with the bitstream:
 ```shell
-python $TINYFPGA_B_REPO/programmer/tinyfpgab.py --program TinyFPGA_B.bin
-```
+python $TINYFPGA_B_REPO/programmer/tinyfpgab.p
 # FPGA教程
 强烈推荐学习此教程，[open-fpga-verilog-tutorial](https://github.com/Obijuan/open-fpga-verilog-tutorial/wiki/Home_EN) `src/basic/open-fpga-verilog-tutorial`目录中有对应的例程
 
