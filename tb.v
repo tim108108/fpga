@@ -30,6 +30,7 @@ always @(cnt)begin
 end
 
 initial
+
 begin
    $dumpfile("tb.vcd");
    $dumpvars(0,tb);
