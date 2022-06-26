@@ -110,3 +110,40 @@ output [width-1:0] out;
 assign out = sel?a:b;
 
 endmodule
+
+
+module comparator(a, b, gt, it, eq);
+input [3:0] a, b;
+output gt, it, eq;
+reg gt, it, eq;
+
+always@(a or b)
+begin 
+	gt = (a>b);
+	it = (a<b);
+	eq = (a == b);
+end
+
+/*
+assign gt = (a>b);
+assign it = (a<b);
+assign eq = (a == b);
+*/
+endmodule
+
+module max_3var(a, b, c, out);
+parameter width = 3;
+input [width-1:0] a,b,c;
+output [width-1:0] out;
+reg [width-1:0] out;
+reg [width-1:0] temp;
+
+always@(a or b or c)
+begin
+if (a>b) 		temp = a;
+else 				temp = b;
+
+if (temp>c) out = temp;
+else				out = c;
+end 
+endmodule
