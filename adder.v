@@ -140,8 +140,8 @@ reg [width-1:0] temp;
 
 always@(a or b or c)
 begin
-if (a>b) 		temp = a;
-else 				temp = b;
+if (a>b)    temp = a;
+else        temp = b;
 
 if (temp>c) out = temp;
 else				out = c;
