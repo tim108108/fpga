@@ -1,4 +1,5 @@
 
+
 module Full_Adder(a,b,c_in,sum,c_out);
 
 input a,b,c_in;
@@ -148,4 +149,53 @@ else        out = c;
 end 
 endmodule
 
-adder.v  adder.v.save  and_or.v  blockingVSnonblocking.v  hell
+module decoder_2to4(in0,in1,w,x,y,z);
+input in0,in1;
+output w,x,y,z;
+reg w,x,y,z;
+always@(in0 or in1)
+begin
+	case({in1,in0})
+		2'b00:{w,x,y,z}=4'b0001;
+		2'b01:{w,x,y,z}=4'b0010;
+		2'b10:{w,x,y,z}=4'b0100;
+		2'b11:{w,x,y,z}=4'b1000;
+	endcase
+end
+
+/*
+always@(in0 or in1)
+begin
+	{w,x,y,z}=4'b0000;
+	case({in1,in0})
+		2'b00:z=1'b1;
+		2'b01:y=1'b1;
+		2'b10:x=1'b1;
+		2'b11:w=1'b1;
+	endcase
+end
+*/
+endmodule
+
+module en_encoder_3to6(en,in,out);
+input en;
+input [2:0] in;
+output [5:0] out;
+reg [5:0] out;
+always@(en or in)
+begin
+	if(!en) out=6'b0;
+	else case(in)
+			3'd0:out=6'b000001;
+			3'd1:out=6'b000010;
+			3'd2:out=6'b000100;
+			3'd3:out=6'b001000;
+			3'd4:out=6'b010000;
+			3'd5:out=6'b100000;
+			default:out=6'b0;
+	endcase
+end
+endmodule
+
+
+
