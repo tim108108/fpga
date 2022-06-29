@@ -1,5 +1,3 @@
-
-
 module Full_Adder(a,b,c_in,sum,c_out);
 
 input a,b,c_in;
@@ -235,4 +233,26 @@ begin
 end
 */
 endmodule
-		
+
+module pri_encode_8ro3(in,v,out);
+input [7:0] in;
+output v;
+output [2:0] out;
+reg v;
+reg [2:0] out;
+
+always@(in)
+begin
+	case(in)
+		8'b1xxxxxxx:{out,v} = 4'b0001;		
+		8'b01xxxxxx:{out,v} = 4'b0011;
+		8'b001xxxxx:{out,v} = 4'b0101;
+		8'b0001xxxx:{out,v} = 4'b0111;
+		8'b00001xxx:{out,v} = 4'b1001;
+		8'b000001xx:{out,v} = 4'b1011;
+		8'b0000001x:{out,v} = 4'b1101;
+		8'b00000001:{out,v} = 4'b1111;
+		default:{out,v} = 4'b0000;
+	endcase
+end
+endmodule
