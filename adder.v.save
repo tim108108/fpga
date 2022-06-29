@@ -1,5 +1,4 @@
 
-
 module Full_Adder(a,b,c_in,sum,c_out);
 
 input a,b,c_in;
@@ -149,90 +148,17 @@ else        out = c;
 end 
 endmodule
 
-module decoder_2to4(in0,in1,w,x,y,z);
-input in0,in1;
-output w,x,y,z;
-reg w,x,y,z;
+module decoder_2to4(in0, in1, w, x, y, z);
+input in0, in1;
+output w, x, y, z;
+
+reg w, x, y, z;
+
 always@(in0 or in1)
 begin
 	case({in1,in0})
 		2'b00:{w,x,y,z}=4'b0001;
-		2'b01:{w,x,y,z}=4'b0010;
-		2'b10:{w,x,y,z}=4'b0100;
-		2'b11:{w,x,y,z}=4'b1000;
-	endcase
-end
+		2'b00:{w,x,y,z}=4'b0001;
+2'b00:{w,x,y,z}=4'b0001;
 
-/*
-always@(in0 or in1)
-begin
-	{w,x,y,z}=4'b0000;
-	case({in1,in0})
-		2'b00:z=1'b1;
-		2'b01:y=1'b1;
-		2'b10:x=1'b1;
-		2'b11:w=1'b1;
-	endcase
-end
-*/
-endmodule
 
-module en_encoder_3to6(en,in,out);
-input en;
-input [2:0] in;
-output [5:0] out;
-reg [5:0] out;
-always@(en or in)
-begin
-	if(!en) out=6'b0;
-	else case(in)
-			3'd0:out=6'b000001;
-			3'd1:out=6'b000010;
-			3'd2:out=6'b000100;
-			3'd3:out=6'b001000;
-			3'd4:out=6'b010000;
-			3'd5:out=6'b100000;
-			default:out=6'b0;
-	endcase
-end
-endmodule
-
-module encoder_4to2(in0,in1,in2,in3,v,o1,o2);
-input in0,in1,in2,in3;
-output v;
-output o1,o2;
-reg v;
-reg o1,o2;
-
-always@(in0 or in1 or in2 or in3)
-begin
-	case({in3,in2,in1,in0})
-		4'b0001:{v,o1,o2} = 3'b100;
-		/*
-		4'b0001:
-			begin
-				v = 1'b1;
-				o1 = 1'b0;
-				o2 = 1'b0;
-			end
-		*/
-		4'b0010:{v,o1,o2} = 3'b101;
-		4'b0100:{v,o1,o2} = 3'b110;
-		4'b1000:{v,o1,o2} = 3'b111;
-		default:{v,o1,o2} = 3'b000;
-	endcase
-end
-/*
-begin
-	v = 1'b1;//內定值(初始值)
-	case({in3,in2,in1,in0})
-		4'b0001:{o1,o2} = 2'b00;
-		4'b0010:{o1,o2} = 2'b01;
-		4'b0100:{o1,o2} = 2'b10;
-		4'b1000:{o1,o2} = 2'b11;
-		default:{v,o1,o2} = 3'b000;
-	endcase
-end
-*/
-endmodule
-		
