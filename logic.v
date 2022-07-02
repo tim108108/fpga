@@ -148,5 +148,148 @@ begin
 end
 endmodule 
 
+module SISO_4b(
+input clk, rst,
+input SI,
+output SO);
 
+reg [3:0] dff4b;
+assign SO = dff4b[3];
+
+always@(posedge clk or negedge rst)
+begin 
+	if (!rst) dff4b <=4'b0;
+	else begin
+		dff4b[3] <= dff4b[2];
+		dff4b[2] <= dff4b[1];
+		dff4b[1] <= dff4b[0];
+		dff4b[0] <= SI;
+		end
+end
+endmodule
+
+module PISO_4b(
+input clk,rst,
+input load,
+input [3:0] PI,
+output SO);
+
+reg [3:0] dff4b;
+assign SO = dff4b[3];
+
+always@(posedge clk or negedge rst)
+begin:PISO_blk	//PISO_blk區塊為命名
+	integer i;
+	if (!rst)
+		dff4b<=4'b0;
+	else if (load)
+			dff4b<=PI;
+		else begin
+			for (i=3;i>0;i=i-1)
+				dff4b[i]<=dff4b[i-1];
+			dff4b[0]<=1'b0;
+			end
+end
+endmodule
+
+module debounce (clk,bin,bout);
+parameter CNT_W = 20;
+input clk;
+input bin;
+output bout;
+reg [CNT_W-1:0] cnt;
+reg bin_syn0,bin_syn1,bin_int;
+
+assign bout = ~cnt[CNT_W-1];	//MSB為1時達到上限
+always@(posedge clk)	//synchron
+begin
+	bin_syn0 <= bin;
+	bin_syn1 <= bin_syn0;
+	bin_int <= bin_syn1;
+end
+
+always@(posedge clk)
+begin
+	if (bin_int) cnt <= {CNT_W{1'b0}};
+	else if (!cnt[CNT_W-1])	//MSB未達上限
+		cnt <= cnt + 1'b1;
+end
+endmodule
+
+module up_cnt_pmtr
+#(parameter WIDTH = 32)(
+input clk,
+input rst,
+input en,
+input clr,
+output reg[WIDTH-1:0] cnt);
+
+wire [WIDTH-1:0] zero = {(WIDTH){1'b0}};
+always@(posedge clk or posedge rst)
+begin
+	if (rst) cnt <= zero;
+	else if (en)
+		begin 
+			if (clr) cnt <= zero;
+			else cnt <= cnt + 1'b1;
+		end
+end
+endmodule
+
+module PWM(
+input clk,rst,
+input [3:0] duty,
+output reg pwm);
+
+reg [2:0] cnt;
+wire it;
+assign it = ({1'b0,cnt}<duty);
+
+always@(posedge clk or posedge rst)
+begin
+	if (rst) cnt = 3'd0;
+//	else if (cnt == 3'd7)
+//			cnt = 3'd0;
+		else cnt = cnt + 1'd1;
+end
+
+always@(posedge clk or posedge rst)
+begin
+	if (rst) pwm = 1'b0;
+	else pwm = it;
+end
+
+endmodule
+
+`define WIDTH 32
+`define OUT_REG
+
+module mux_def(
+`ifdef OUT_REG
+input rst,
+input clk,
+`endif
+input sel,
+input [`WIDTH-1:0] a,b,
+output reg [`WIDTH-1:0] out);
+
+wire [`WIDTH-1:0] temp;
+assign temp = sel?a:b;
+
+`ifdef OUT_REG
+always@(posedge clk or posedge rst)
+begin
+	if (rst) 
+		out <= `WIDTH'd0;
+	else
+		out <= temp;
+end
+`else 
+always@(temp)
+begin
+	out <= temp;
+end
+`endif
+
+endmodule
 
