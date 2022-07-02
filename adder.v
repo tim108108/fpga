@@ -35,24 +35,23 @@ reg [3:0] s,cs;
 wire [2:0] co;
 wire [5:0] sum;
 always@(a or b or c)
-/*
 begin
 {cs[0],s[0]} = a[0]+b[0]+c[0];
 {cs[1],s[1]} = a[1]+b[1]+c[1];
 {cs[2],s[2]} = a[2]+b[2]+c[2];
 {cs[3],s[3]} = a[3]+b[3]+c[3];
-*/
+/*
 begin:csa_blk	//區塊標籤
 integer i;	//區域變數
 for(i=0;i<4;i=i+1)
 {cs[i],s[i]}=a[i]+b[i]+c[i];
-
+*/
 end
 assign sum[0] = s[0];
 assign {co[0],sum[1]} = cs[0]+s[1];
 assign {co[1],sum[2]} = cs[1]+s[2]+co[0];
 assign {co[2],sum[3]} = cs[2]+s[3]+co[1];
-assign {sum[5],sum[4]} = cs[4]+co[2];
+assign {sum[5],sum[4]} = cs[3]+co[2];
 endmodule
 
 module mux_2to1(a,b,sel,out);
