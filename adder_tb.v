@@ -1,3 +1,4 @@
+/*
 `timescale 1ns/100ps
 
 module CSA_3var_4b_test1;
@@ -30,4 +31,37 @@ begin
    $dumpfile("adder_tb.vcd");
    $dumpvars(0,CSA_3var_4b_test1);
 end
+endmodule
+*/
+
+`include "define.v"
+`timescale 1ns/100ps
+
+module max_3var_test1;
+//input
+reg [`WIDTH-1:0] a,b,c;
+//output
+wire [`WIDTH-1:0] out;
+max_3var max1(.a(a), 
+							.b(b), 
+							.c(c), 
+							.out(out));
+initial
+begin: input_set_blk
+integer i;	//迴圈次數
+integer seed1;	//隨機種子1
+integer seed2;	//隨機種子2
+integer seed3;	//隨機種子3
+seed1 = 1;	seed2 = 2;	seed3 = 3;	
+for (i = 0; i<100; i = i+1)
+begin
+a = $random(seed1);
+b = $random(seed2);
+c = $random(seed3);
+#10 $display($time,"a =%d, b=%d, c=%d, out=%d\n",
+							a,b,c,out);
+end	
+#10 $finish;
+end
+
 endmodule
